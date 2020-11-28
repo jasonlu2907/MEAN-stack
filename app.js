@@ -35,11 +35,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 // Route
-app.use('/users', users);
-
 app.use('', (req, res) => {
   res.send('Invalid Endpoint');
 });
+
+app.use('/users', users);
 
 // Server started
 app.listen(port, () => {
