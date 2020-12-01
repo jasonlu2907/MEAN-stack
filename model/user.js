@@ -32,15 +32,15 @@ module.exports.getUserByUsername = function(username, callback) {
   User.findOne(query, callback);
 }
 
-module.exports.addUser = async function(newUser, callback) {
-  const password = await newUser.password;
-  const salt = await bcrypt.genSalt(10);
-  bcrypt.hash(password, salt, (err, hash) => {
-    if (err) { throw err; }
-    newUser.password = hash;
-    newUser.save(callback);
+module.exports.addUser = (newUser, callback) => {
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newUser.password, salt, (err, hash) => {
+      if (err) { throw err; }
+      newUser.password = hash;
+      // console.log(newUser.password);
+      newUser.save(callback);
+    });
   });
-
 }
 
 module.exports.comparePassword = function(candidatePassword, hash, callback) {

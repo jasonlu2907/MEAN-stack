@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-
+const config = require('../config/database');
 const User = require('../model/user');
+const user = require('../model/user');
 
 // Register
 /** https://.../users/register */
@@ -26,14 +27,44 @@ router.post('/register', (req, res, next) => {
 
 // Authentification
 /** https://.../users/authenticate */
-router.post('/authentificate', (req, res, next) => {
-  res.send('AUTHENTIFICATION');
+router.post('/authenticate', (req, res, next) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  User.getUserByUsername(username, (err, user) => {
+    if(err) throw err;
+    if(!user) {
+      return res.json({success: false, msg: 'User not found'});
+    }
+
+    User.comparePassword(password, user.password, (err, isMatch) => {
+      if(err) throw err;
+      if(isMatch) {
+        const token = jwt.sign({data: user}, config.secret, {
+          expiresIn: 604800 // 1 week
+        });
+        res.json({
+          success: true,
+          token: 'JWT '+token,
+          user: {
+            id: user._id,
+            name: user.name,
+            username: user.username,
+            email: user.email
+          }
+        })
+      } else {
+        return res.json({success: false, msg: 'Wrong password'});
+      }
+    });
+  });
 });
 
 // Profile
 /** https://.../users/profile */
-router.get('/profile', (req, res, next) => {
-  res.send('PROFILE');
+// Tạm thời check xem là bước authenticate(trong code bên trên + passport.js đúng ko)
+router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  res.json({user: req.user});
 });
 
 module.exports = router;

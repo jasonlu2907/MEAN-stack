@@ -34,11 +34,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Body-parser Middleware
 app.use(bodyParser.json());
 
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./config/passport')(passport);
+
 // Route
 app.use('/users', users); // f để cái này lên trên thằng app.use('')
 
 app.use('', (req, res) => {
-  res.send('Invalid Endpoint');
+  res.send('Wassuppppp');
 });
 
 // Server started
