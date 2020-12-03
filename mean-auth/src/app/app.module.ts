@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { HttpClientModule } from '@angular/common/http';
+import { FlashMessagesModule } from 'angular2-flash-messages';
+
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -25,6 +28,8 @@ import { routing } from './app.routing';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    FlashMessagesModule.forRoot(),
+    HttpClientModule,
     routing
   ],
   providers: [],

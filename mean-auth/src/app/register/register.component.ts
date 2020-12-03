@@ -1,6 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { AuthService } from '../services/auth.service';
+
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -13,14 +18,15 @@ export class RegisterComponent implements OnInit {
   // password: string;
   form: FormGroup;
 
-  register: boolean;
   @ViewChild('remove') private removeIntruction: ElementRef;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private flashMessage: FlashMessagesService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.createForm();
-    this.register = this.form.invalid ? false : true;
 
   }
 
@@ -42,10 +48,20 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     // window.alert(`Hello ${this.form.value.name}. Thank you, you have registered`);
-    console.log(this.register);
-    console.log(this.form.value);
+    // console.log(this.form.value);
 
-    this.register = true;
+    this.authService.registerUser(this.form.value).subscribe(
+      data => {
+        if(data) {
+          this.flashMessage.show('<b>Great!</b> You are now registered and can now login', {cssClass: 'alert-success', timeout: 3000});
+          this.router.navigate(['/login']);
+        } else {
+          this.flashMessage.show('Something went wrong', {cssClass: 'alert-danger', timeout: 3000});
+          this.router.navigate(['/register']);
+        }
+      }
+    );
+
     this.form.reset({
       name: '',
       usernam: '',
@@ -98,9 +114,5 @@ export class RegisterComponent implements OnInit {
         }
       }
     }
-  }
-
-  onRemove() {
-    this.removeIntruction.nativeElement.remove();
   }
 }
