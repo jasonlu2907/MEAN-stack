@@ -4,18 +4,22 @@
     <div class="form-group">
       <label for="inputUsername">Username</label>
       <input type="text" formControlName="username" required class="form-control" id="inputUsername" placeholder="Enter username">
+      <p *ngIf="formErrors.username" class="error text-danger">{{formErrors.username}}</p>
     </div>
     <div class="form-group">
       <label for="inputPass">Password</label>
       <input type="password" formControlName="password" required class="form-control" id="inputPass" placeholder="Enter password">
+      <p *ngIf="formErrors.password" class="error text-danger">{{formErrors.password}}</p>
     </div>
     <div class="form-group">
       <label for="inputEmail">Email address</label>
       <input type="email" formControlName="email" required class="form-control" id="inputEmail" placeholder="Enter email">
+      <p *ngIf="formErrors.email" class="error text-danger">{{formErrors.email}}</p>
     </div>
     <div class="form-group">
       <label for="name">Name</label>
       <input type="text" formControlName="name" class="form-control" id="name" placeholder="Your name">
+      <p *ngIf="formErrors.name" class="error text-danger">{{formErrors.name}}</p>
     </div>
     <!-- <div class="form-group">
       <label for="exampleTextarea">Example textarea</label>
