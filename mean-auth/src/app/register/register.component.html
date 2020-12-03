@@ -1,1 +1,41 @@
-<p>register works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <fieldset>
+    <legend>Register Form</legend>
+    <div class="form-group">
+      <label for="inputUsername">Username</label>
+      <input type="text" formControlName="username" required class="form-control" id="inputUsername" placeholder="Enter username">
+    </div>
+    <div class="form-group">
+      <label for="inputPass">Password</label>
+      <input type="password" formControlName="password" required class="form-control" id="inputPass" placeholder="Enter password">
+    </div>
+    <div class="form-group">
+      <label for="inputEmail">Email address</label>
+      <input type="email" formControlName="email" required class="form-control" id="inputEmail" placeholder="Enter email">
+    </div>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" formControlName="name" class="form-control" id="name" placeholder="Your name">
+    </div>
+    <!-- <div class="form-group">
+      <label for="exampleTextarea">Example textarea</label>
+      <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+    </div> -->
+    <!-- <div class="form-group">
+      <label for="exampleInputFile">File input</label>
+      <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+      <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+    </div> -->
+    <!-- <fieldset class="form-group">
+      <legend>Sliders</legend>
+      <label for="customRange1">Example range</label>
+      <input type="range" class="custom-range" id="customRange1">
+    </fieldset> -->
+    <button [disabled]="form.invalid" type="submit" class="btn btn-primary">Submit</button>
+  </fieldset>
+</form>
+
+<div *ngIf="register" #remove class="alert alert-dismissible alert-success my-3">
+  <button type="button" (click)="onRemove()" class="close" data-dismiss="alert">&times;</button>
+  <strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
+</div>
