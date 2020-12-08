@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 //Observers
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+// import { delay } from 'rxjs/operators';
 import { map, catchError } from 'rxjs/operators';
 
 import { baseURL } from '../share/baseurl';
@@ -13,17 +13,48 @@ import { baseURL } from '../share/baseurl';
 })
 export class AuthService {
   authenToken: any;
-  user: any;
-
+  user: User;
+  
   constructor(private http: HttpClient) { }
-
-  registerUser(user: any): Observable<any> {
+  
+  registerUser(user: User): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
-    return this.http.post<any>(baseURL + 'users/register', user, httpOptions);
-      // .pipe(map(res => res.json()));
+    return this.http.post(baseURL + 'users/register', user, httpOptions)
+    .pipe(map(res => JSON.stringify(res)));
   }
+  
+  authenticateUser(user: any) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.post(baseURL + 'users/authenticate', user, httpOptions)
+    .pipe(map(res => JSON.stringify(res)));
+  }
+
+  storeUserData(token: string, user: User) {
+    localStorage.setItem('id_token', token);
+    // localStorage can only store a string, not Object
+    localStorage.setItem('user', JSON.stringify(user));
+    this.authenToken = token;
+    this.user = user;
+  }
+
+  logout() {
+    this.authenToken = null;
+    this.user = null;
+    localStorage.clear();
+  }
+}
+
+interface User {
+  name?: string,
+  username: string,
+  password: string,
+  email: string
 }

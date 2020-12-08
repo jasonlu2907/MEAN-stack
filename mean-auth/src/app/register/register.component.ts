@@ -50,17 +50,17 @@ export class RegisterComponent implements OnInit {
     // window.alert(`Hello ${this.form.value.name}. Thank you, you have registered`);
     // console.log(this.form.value);
 
-    this.authService.registerUser(this.form.value).subscribe(
-      data => {
-        if(data) {
-          this.flashMessage.show('<b>Great!</b> You are now registered and can now login', {cssClass: 'alert-success', timeout: 3000});
-          this.router.navigate(['/login']);
-        } else {
+    this.authService.registerUser(this.form.value).subscribe(data => {
+      var obj = JSON.parse(data);
+      // console.log(obj.success);
+      if(obj.success) {
+        this.flashMessage.show('<b>Great!</b> You are now registered and can now login', {cssClass: 'alert-success', timeout: 3000});
+        this.router.navigate(['/login']);
+      } else {
           this.flashMessage.show('Something went wrong', {cssClass: 'alert-danger', timeout: 3000});
           this.router.navigate(['/register']);
-        }
       }
-    );
+    });
 
     this.form.reset({
       name: '',
