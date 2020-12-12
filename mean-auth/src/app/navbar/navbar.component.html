@@ -8,13 +8,13 @@
     <ul class="navbar-nav mr-auto">
       <li [routerLinkActive]="['active']"  class="nav-item">
         <a class="nav-link" [routerLink]="'dashboard'">Dashboard</a>
-      </li>
+      <!-- </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Pricing</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">About</a>
-      </li>
+      </li> -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
         <div class="dropdown-menu">
@@ -27,9 +27,11 @@
       </li>
     </ul>
     <ul class="navbar-nav">
-      <li [routerLinkActive]="['active']"  class="nav-item"><a [routerLink]="['/login']" class="nav-link">Login</a></li>
-      <li [routerLinkActive]="['active']"  class="nav-item"><a [routerLink]="['/register']" class="nav-link">Register</a></li>
-      <li class="nav-item"><a (click)="onLogout()" class="nav-link">Logout</a></li>
+      <li *ngIf="authService.isLoggedIn()"[routerLinkActive]="['active']"  class="nav-item"><a [routerLink]="['/profile']" class="nav-link">Profile</a></li>
+
+      <li *ngIf="!authService.isLoggedIn()"[routerLinkActive]="['active']"  class="nav-item"><a [routerLink]="['/login']" class="nav-link">Login</a></li>
+      <li *ngIf="!authService.isLoggedIn()"[routerLinkActive]="['active']"  class="nav-item"><a [routerLink]="['/register']" class="nav-link">Register</a></li>
+      <li *ngIf="authService.isLoggedIn()"class="nav-item"><a [routerLink]="['/login']" (click)="onLogout()" class="nav-link">Logout</a></li>
     </ul>
   </div>
 </nav>

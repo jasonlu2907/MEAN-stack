@@ -8,6 +8,8 @@ import { map, catchError } from 'rxjs/operators';
 
 import { baseURL } from '../share/baseurl';
 
+import { tokenNotExpired } from 'angular2-jwt';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +26,7 @@ export class AuthService {
       })
     };
     return this.http.post(baseURL + 'users/register', user, httpOptions)
-    .pipe(map(res => JSON.stringify(res)));
+      .pipe(map(res => JSON.stringify(res)));
   }
   
   authenticateUser(user: any) {
@@ -34,7 +36,7 @@ export class AuthService {
       })
     };
     return this.http.post(baseURL + 'users/authenticate', user, httpOptions)
-    .pipe(map(res => JSON.stringify(res)));
+      .pipe(map(res => JSON.stringify(res)));
   }
 
   storeUserData(token: string, user: User) {
@@ -49,6 +51,27 @@ export class AuthService {
     this.authenToken = null;
     this.user = null;
     localStorage.clear();
+  }
+
+  getUserProfile() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Authorization': this.authenToken
+      })
+    };
+    return this.http.get(baseURL + 'users/profile', httpOptions)
+      .pipe(map(res => JSON.parse(JSON.stringify(res))));
+  }
+
+  loadToken() {
+    const token = localStorage.getItem('id_token');
+    this.authenToken = token;
+  }
+
+  isLoggedIn() {
+    return tokenNotExpired('id_token');
   }
 }
 
