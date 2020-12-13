@@ -9,7 +9,12 @@ import { map, catchError } from 'rxjs/operators';
 import { baseURL } from '../share/baseurl';
 
 import { tokenNotExpired } from 'angular2-jwt';
-
+declare module "@angular/core" {
+  interface ModuleWithProviders<T = any> {
+      ngModule: Type<T>;
+      providers?: Provider[];
+  }
+}
 @Injectable({
   providedIn: 'root'
 })
